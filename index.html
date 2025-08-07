@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    
+</head>
+<body>
+    <div class="box">
+        <p class="head">Translator app</p>
+        <br>
+        <label for="input">Input: </label>
+        <input type="text" id="inputText">
+        <br>
+        <select name="languages" id="lang">
+            <option value="English">English</option>
+            <option value="French">French</option>
+            <option value="Spanish">Spanish</option>
+            <option value="Hindi">Hindi</option>
+        </select>
+        <br>
+        <br>
+        <button id="translateBtn">Translate</button>
+        <br>
+        <label for="output">Output: </label>
+        <div class="outputpart" id="resultText"></div>
+    </div>
+    <script type="module">
+        import {GoogleGenerativeAI} from "https://esm.run/@google/generative-ai"
+        const API_KEY = "AIzaSyAa4Gw5CzAu7whpIrRcpHUWLPBR6VeMkyE"
+        const genAI = new GoogleGenerativeAI(API_KEY);
+    document.getElementById("translateBtn").onclick = async function(){
+        const inputText = document.getElementById("inputText").value
+        const language = document.getElementById("lang").value
+        const prompt = `Tranlsate this to ${language}:${inputText}`
+      try{  
+        const model = genAI.getGenerativeModel({model: "gemini-1.5-flash"})
+        const result = await model.generateContent(prompt)
+        const output = await result.response.text()
+        document.getElementById("resultText").innerText = output
+
+      }catch(error){
+        document.getElementById("resultText").innerText = "Translation Failed"
+      }
+    }
+
+    </script>
+</body>
+</html>
